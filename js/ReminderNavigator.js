@@ -20,7 +20,19 @@ export default class ReminderNavigator extends Component {
     constructor(props) {
         super(props)
         this.renderScene = this.renderScene.bind(this)
+        this.interceptTouchEvent = this.interceptTouchEvent.bind(this)
     }
+
+    onStartShouldSetResponder(e) {
+        // 这里应该判断是否点在特定区域内。。。懒得搞了。。。随便写写
+        console.log(e.nativeEvent.locationX && e.nativeEvent.locationY && e.nativeEvent.locationY < 64);
+        return e.nativeEvent.locationX && e.nativeEvent.locationY && e.nativeEvent.locationY < 64
+    }
+
+   interceptTouchEvent(e): boolean {
+       console.log(this.searchBar);
+       this.searchBar && this.searchBar.focus()
+   }
 
     render() {
         return (
@@ -38,9 +50,9 @@ export default class ReminderNavigator extends Component {
 
     renderScene(route: any) {
         return (
-            <View style={styles.container}>
+            <View style={styles.container} onResponderRelease={this.interceptTouchEvent} onStartShouldSetResponder={this.onStartShouldSetResponder}>
                 <View style={styles.searchBarWrapper}>
-                    <SearchBar style={styles.searchBar} textInputStyle={styles.searchBar}/>
+                    <SearchBar style={styles.searchBar} textInputStyle={styles.searchBar} ref={(ref) => {this.searchBar = ref}} />
                     <TouchableOpacity>
                         <Image source={require('../image/Add.png')} style={[StandardStyle.navigationBarItemSize, styles.searchBarButton]}/>
                     </TouchableOpacity>

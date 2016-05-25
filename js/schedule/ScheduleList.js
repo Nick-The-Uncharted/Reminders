@@ -49,10 +49,8 @@ export class ScheduleList extends Component {
     componentWillMount() {
         this._panResponder = PanResponder.create({
              // Ask to be the responder:
-             onStartShouldSetPanResponder: (evt, gestureState) => true,
-             onStartShouldSetPanResponderCapture: (evt, gestureState) => gestureState.dx > 3 && gestureState.dy > 3,
+             onStartShouldSetPanResponder: (evt, gestureState) => gestureState.dx != 0 || gestureState.dy != 0,
              onMoveShouldSetPanResponder: (evt, gestureState) => true,
-             onMoveShouldSetPanResponderCapture: (evt, gestureState) => gestureState.dx > 3 && gestureState.dy > 3,
 
              onPanResponderGrant: (evt, gestureState) => {
                // The guesture has started. Show visual feedback so the user knows
@@ -131,8 +129,8 @@ export class ScheduleList extends Component {
                            height: windowHeight * 0.9,
                            position: 'absolute',
                            top: this.state.scrollTop.interpolate({
-                               inputRange: [-index * initHeight * 4 , 0                 , headerHeight                     , headerHeight + 100],
-                               outputRange: [0                      , index * initHeight, headerHeight + index * initHeight, headerHeight + index * initHeight + 10 * (index + 1)],
+                               inputRange: [-index * initHeight  , 0                 , headerHeight                     , headerHeight + 100],
+                               outputRange: [0                   , index * initHeight, headerHeight + index * initHeight, headerHeight + index * initHeight + 10 * (index + 1)],
                                extrapolateLeft: 'clamp'
                             }),
                            width: Dimensions.get('window').width
@@ -163,7 +161,8 @@ export class ScheduleList extends Component {
 
        render() {
            return (
-               <View style={styles.scrollView}  {...this._panResponder.panHandlers}>
+               <View style={styles.scrollView} {...this._panResponder.panHandlers}
+               >
                    {this.renderCards()}
                </View>
            )

@@ -12,10 +12,15 @@ export class SearchBar extends React.Component {
         super(props)
     }
 
+    focus() {
+        this.textInput && this.textInput.focus()
+    }
+
     render() {
         return (
             <TextInput
                 style={[SearchBarStyles.color, SearchBarStyles.shape, this.props.textInputStyle]}
+                ref = {(ref)=>{this.textInput = ref}}
                 placeholderTextColor="white"
                 placeholder="Search"
             />
