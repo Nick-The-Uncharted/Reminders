@@ -1,4 +1,5 @@
 // @flow
+// @providesModule ScheduleCard
 
 import React, { Component } from 'react';
 import {
@@ -108,6 +109,9 @@ class ScheduleItemList extends Component {
                 renderRow={this.renderRow}
                 enableEmptySections = {true}
                 renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} style={styles.separator} />}
+                keyboardShouldPersistTaps={true}
+                keyboardDismissMode={'on-drag'}
+                pointerEvents={this.props.listing ? 'none' : 'auto'}
                 />
         )
     }
@@ -121,7 +125,7 @@ export class ScheduleCard extends Component {
         return (
             <View style={[styles.container, this.props.style]}>
                 <ScheduleTitle {...this.props}/>
-                <ScheduleItemList scheduleItems = {this.props.schedule.scheduleItems} />
+                <ScheduleItemList scheduleItems = {this.props.schedule.scheduleItems} listing={this.props.listing}/>
             </View>
         )
     }

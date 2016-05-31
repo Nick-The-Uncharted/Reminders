@@ -25,12 +25,10 @@ export default class ReminderNavigator extends Component {
 
     onStartShouldSetResponder(e) {
         // 这里应该判断是否点在特定区域内。。。懒得搞了。。。随便写写
-        console.log(e.nativeEvent.locationX && e.nativeEvent.locationY && e.nativeEvent.locationY < 64);
         return e.nativeEvent.locationX && e.nativeEvent.locationY && e.nativeEvent.locationY < 64
     }
 
    interceptTouchEvent(e): boolean {
-       console.log(this.searchBar);
        this.searchBar && this.searchBar.focus()
    }
 

@@ -16,10 +16,10 @@ import {
 } from 'react-native';
 import {StandardScheduleColor, ScheduleCard} from './ScheduleCard'
 
-import type {Schedule} from './ScheduleCard'
+import type {Schedule} from 'ScheduleCard'
 var AnimatedScheduleCard = Animated.createAnimatedComponent(ScheduleCard)
 var scheduleData: Schedule[] = [
-    {title: "Test", tintColor: StandardScheduleColor.blue, scheduleItems: []},
+    {title: "asdhjashfkasjfhka", tintColor: StandardScheduleColor.blue, scheduleItems: []},
     {title: "杂项",  tintColor: StandardScheduleColor.yellow, scheduleItems: [{name: "上课", completed: true}, {name: "中饭", completed: true}, {name: "午觉", completed: false}]},
     {title: "南大",  tintColor: StandardScheduleColor.green, scheduleItems: []},
     {title: "寒假",  tintColor: StandardScheduleColor.red, scheduleItems: []},
@@ -34,22 +34,20 @@ export class ScheduleList extends Component {
         selectedIndex: ?number
     };
     stopAtTop: boolean;
-    listing: boolean;
     _panResponder: any;
     itemHeaderHeight: number;
 
     constructor(props: any) {
         super(props)
-        this.state = {scrollTop: new Animated.Value(headerHeight), selectedIndex: undefined}
+        this.state = {scrollTop: new Animated.Value(headerHeight), selectedIndex: undefined, listing: true}
         this.stopAtTop = false
-        this.listing = true
         this.itemHeaderHeight = 75
     }
 
     componentWillMount() {
         this._panResponder = PanResponder.create({
              // Ask to be the responder:
-             onStartShouldSetPanResponder: (evt, gestureState) => gestureState.dx != 0 || gestureState.dy != 0,
+            //  onStartShouldSetPanResponder: (evt, gestureState) => gestureState.dx != 0 || gestureState.dy != 0,
              onMoveShouldSetPanResponder: (evt, gestureState) => true,
 
              onPanResponderGrant: (evt, gestureState) => {
@@ -129,27 +127,27 @@ export class ScheduleList extends Component {
                            height: windowHeight * 0.9,
                            position: 'absolute',
                            top: this.state.scrollTop.interpolate({
-                               inputRange: [-index * initHeight  , 0                 , headerHeight                     , headerHeight + 100],
-                               outputRange: [0                   , index * initHeight, headerHeight + index * initHeight, headerHeight + index * initHeight + 10 * (index + 1)],
+                               inputRange: [-index * initHeight * 4  , 0                 , headerHeight                     , headerHeight + 100],
+                               outputRange: [0                       , index * initHeight, headerHeight + index * initHeight, headerHeight + index * initHeight + 10 * (index + 1)],
                                extrapolateLeft: 'clamp'
                             }),
                            width: Dimensions.get('window').width
                          },
-                         !this.listing && {top: this.state.selectedIndex === index ? 0 : this.getBottomPosition(index)}
+                         !this.state.listing && {top: this.state.selectedIndex === index ? 0 : this.getBottomPosition(index)}
                        ]}
                     schedule={schedule}
                     onSelect={() => {
                         LayoutAnimation.easeInEaseOut()
-                        if (!this.listing && index === this.state.selectedIndex) {
+                        if (!this.state.listing && index === this.state.selectedIndex) {
                             // dismiss
-                            this.listing = true
+                            this.setState({listing: true})
                             this.setState({selectedIndex: undefined})
-                        } else if (this.listing) {
-                            this.listing = false
+                        } else if (this.state.listing) {
+                            this.setState({listing: false})
                             this.setState({selectedIndex: index})
                         }
                     }}
-                    listing={this.listing}
+                    listing={this.state.listing}
                     onUpdateHeaderHeight={(itemHeaderHeight)=>{
                         console.log(itemHeaderHeight);
                         this.itemHeaderHeight = Math.max(itemHeaderHeight, this.itemHeaderHeight)
@@ -161,7 +159,7 @@ export class ScheduleList extends Component {
 
        render() {
            return (
-               <View style={styles.scrollView} {...this._panResponder.panHandlers}
+               <View style={styles.scrollView} {...this._panResponder.panHandlers} pointerEvent= {'none'}
                >
                    {this.renderCards()}
                </View>
